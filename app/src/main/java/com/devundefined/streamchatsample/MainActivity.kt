@@ -6,9 +6,6 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    external fun getApiKey(): String
-    external fun getSecretKey(): String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,9 +17,6 @@ class MainActivity : AppCompatActivity() {
         textView.text = "Secrets:\nApi key is \"${getApiKey()}\"\nSecret key is \"${getSecretKey()}\""
     }
 
-    companion object {
-        init {
-            System.loadLibrary("keys")
-        }
-    }
+    private fun getApiKey() = BuildConfig.API_KEY
+    private fun getSecretKey() = BuildConfig.API_SECRET
 }
