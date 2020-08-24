@@ -37,7 +37,12 @@ class InputNameFragment : Fragment(R.layout.fragment_input_name) {
         }
         binding.saveButton.setOnClickListener {
             userRepo.save(UserExtensions.createUser(binding.nameInput.text.toString()))
+            showChatFragment()
         }
+    }
+
+    private fun showChatFragment() {
+        (activity as? MainActivity)?.showFragment(ChatFragment())
     }
 
     companion object {
