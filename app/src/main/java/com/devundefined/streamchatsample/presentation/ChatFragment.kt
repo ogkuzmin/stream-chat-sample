@@ -18,11 +18,13 @@ import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.api.models.QueryChannelRequest
 import io.getstream.chat.android.client.controllers.ChannelController
 import io.getstream.chat.android.client.errors.ChatError
+import io.getstream.chat.android.client.events.NewMessageEvent
 import io.getstream.chat.android.client.logger.ChatLogLevel
 import io.getstream.chat.android.client.models.Channel
 import io.getstream.chat.android.client.models.Message
 import io.getstream.chat.android.client.models.name
 import io.getstream.chat.android.client.socket.InitConnectionListener
+import io.getstream.chat.android.client.utils.observable.Subscription
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -32,6 +34,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private lateinit var client: ChatClient
     private lateinit var channelController: ChannelController
     private lateinit var binding: FragmentChatBinding
+    private var subscription: Subscription? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,6 +97,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 false -> handleError(it.error())
             }
         }
+        channelController.events().filter(EVENT_TYPE_NEW_MESSAGES).subscribe { chatEvent ->
+            (chatEvent as? NewMessageEvent)?.let { onNewMessage(it.message) }
+        }
+    }
+
+    private fun onNewMessage(message: Message) {
+        Timber.d("Received new message:\n${message.text}")
     }
 
     private fun showChannelContent(channel: Channel) {
@@ -114,11 +124,17 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         messages.size
     }
 
+    override fun onDestroy() {
+        channelController.stopWatching()
+        subscription?.unsubscribe()
+        super.onDestroy()
+    }
 
     companion object {
         private const val CHANNEL_TYPE = "livestream"
         private const val CHANNEL_ID = "channel_id"
         private const val KEY_NAME = "name"
         private const val CHANNEL_NAME = "Sample channel"
+        private const val EVENT_TYPE_NEW_MESSAGES = "message.new"
     }
 }
