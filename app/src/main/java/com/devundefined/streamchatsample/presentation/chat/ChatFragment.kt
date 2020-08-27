@@ -1,4 +1,4 @@
-package com.devundefined.streamchatsample.presentation
+package com.devundefined.streamchatsample.presentation.chat
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.devundefined.streamchatsample.BuildConfig
 import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.databinding.FragmentChatBinding
@@ -22,6 +23,7 @@ import io.getstream.chat.android.client.events.NewMessageEvent
 import io.getstream.chat.android.client.logger.ChatLogLevel
 import io.getstream.chat.android.client.models.Channel
 import io.getstream.chat.android.client.models.Message
+import io.getstream.chat.android.client.models.User
 import io.getstream.chat.android.client.models.name
 import io.getstream.chat.android.client.socket.InitConnectionListener
 import io.getstream.chat.android.client.utils.observable.Subscription
@@ -33,7 +35,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private val appContext: Context by inject()
     private lateinit var client: ChatClient
     private lateinit var channelController: ChannelController
+    private lateinit var currentUser: User
     private lateinit var binding: FragmentChatBinding
+    private lateinit var adapter: MessageAdapter
     private var subscription: Subscription? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,8 +47,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         client = ChatClient.Builder(BuildConfig.API_KEY, appContext)
             .logLevel(ChatLogLevel.ALL)
             .build()
-        val user = userRepo.find() ?: throw IllegalArgumentException("User must be non null!!!")
-        client.setUser(user, user.token, object : InitConnectionListener() {
+        currentUser = userRepo.find() ?: throw IllegalArgumentException("User must be non null!!!")
+        client.setUser(currentUser, currentUser.token, object : InitConnectionListener() {
             override fun onError(error: ChatError) {
                 handleError(error)
             }
@@ -53,10 +57,17 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 onConnected()
             }
         })
-        binding.messageInput.addTextChangedListener { text: Editable? ->
-            binding.sendButton.isEnabled = text?.isNotBlank() == true
+        binding.run {
+            messageInput.addTextChangedListener { text: Editable? ->
+                binding.sendButton.isEnabled = text?.isNotBlank() == true
+            }
+            messageInput.onFocusChangeListener = View.OnFocusChangeListener { _, _ ->
+                messageRecycler.post {
+                    messageRecycler.smoothScrollToPosition(adapter.itemCount)
+                }
+            }
+            binding.sendButton.setOnClickListener { sendMessage() }
         }
-        binding.sendButton.setOnClickListener { sendMessage() }
     }
 
     private fun sendMessage() {
@@ -84,7 +95,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun onConnected() {
-        channelController = client.channel(CHANNEL_TYPE, CHANNEL_ID)
+        channelController = client.channel(
+            CHANNEL_TYPE,
+            CHANNEL_ID
+        )
         val data: Map<String, Any> = mapOf()
         channelController.query(
             QueryChannelRequest()
@@ -104,6 +118,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun onNewMessage(message: Message) {
         Timber.d("Received new message:\n${message.text}")
+        adapter.insertNew(message)
+        binding.messageRecycler.smoothScrollToPosition(adapter.itemCount)
     }
 
     private fun showChannelContent(channel: Channel) {
@@ -121,7 +137,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun showMessages(messages: List<Message>) {
-        messages.size
+        adapter = MessageAdapter(currentUser, messages)
+        binding.messageRecycler.run {
+            adapter = this@ChatFragment.adapter
+            layoutManager = LinearLayoutManager(context)
+            post { smoothScrollToPosition(this@ChatFragment.adapter.itemCount) }
+        }
     }
 
     override fun onDestroy() {

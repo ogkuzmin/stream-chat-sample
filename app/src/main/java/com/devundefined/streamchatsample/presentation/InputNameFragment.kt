@@ -1,6 +1,5 @@
 package com.devundefined.streamchatsample.presentation
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -12,7 +11,7 @@ import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.databinding.FragmentInputNameBinding
 import com.devundefined.streamchatsample.domain.UserExtensions
 import com.devundefined.streamchatsample.domain.UserRepo
-import io.getstream.chat.android.client.models.User
+import com.devundefined.streamchatsample.presentation.chat.ChatFragment
 import org.koin.android.ext.android.inject
 
 class InputNameFragment : Fragment(R.layout.fragment_input_name) {

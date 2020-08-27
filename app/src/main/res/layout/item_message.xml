@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/authorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        tools:text="Tester of test"/>
+
+
+    <TextView
+        android:id="@+id/messageText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@android:color/black"
+        android:gravity="fill"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in eros elementum, rhoncus magna et, sodales augue. Mauris vitae porta erat. Pellentesque sed ipsum id orci varius fringilla. Suspendisse vulputate, tortor sed iaculis cursus, arcu tellus tristique dolor, at tempor dui massa sit amet nibh. "/>
+
+</LinearLayout>

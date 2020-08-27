@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.domain.UserRepo
+import com.devundefined.streamchatsample.presentation.chat.ChatFragment
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {

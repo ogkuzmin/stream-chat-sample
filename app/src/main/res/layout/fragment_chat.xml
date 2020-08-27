@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccentLight"
             android:gravity="center_vertical"
-            android:minHeight="120dp"
+            android:minHeight="80dp"
             android:orientation="horizontal"
             android:paddingStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
