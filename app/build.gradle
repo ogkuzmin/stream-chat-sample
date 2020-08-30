@@ -61,6 +61,7 @@ dependencies {
     implementation "com.github.GetStream:stream-chat-android-client:$chat_v"
     implementation "org.koin:koin-android:$koin_v"
     implementation "com.jakewharton.timber:timber:$timber_v"
+    implementation 'com.auth0:java-jwt:3.10.3'
 
     testImplementation 'junit:junit:4.13'
 

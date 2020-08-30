@@ -45,7 +45,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding = FragmentChatBinding.bind(view)
 
         client = ChatClient.Builder(BuildConfig.API_KEY, appContext)
-            .logLevel(ChatLogLevel.ALL)
+            .logLevel(ChatLogLevel.ERROR)
             .build()
         currentUser = userRepo.find() ?: throw IllegalArgumentException("User must be non null!!!")
         client.setUser(currentUser, currentUser.token, object : InitConnectionListener() {
