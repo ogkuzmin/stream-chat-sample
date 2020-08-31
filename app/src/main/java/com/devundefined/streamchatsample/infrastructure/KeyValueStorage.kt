@@ -8,10 +8,12 @@ interface KeyValueStorage {
     fun save(key: String, value: Long)
     fun save(key: String, value: Double)
     fun save(key: String, value: String)
+    fun save(key: String, value: Boolean)
     fun get(key: String, defaultValue: Int): Int
     fun get(key: String, defaultValue: Long): Long
     fun get(key: String, defaultValue: Double): Double
     fun get(key: String, defaultValue: String): String
+    fun get(key: String, defaultValue: Boolean): Boolean
 }
 
 class KeyValueStorageImpl(private val sp: SharedPreferences) : KeyValueStorage {
@@ -35,4 +37,8 @@ class KeyValueStorageImpl(private val sp: SharedPreferences) : KeyValueStorage {
 
     override fun get(key: String, defaultValue: String) =
         sp.getString(key, defaultValue) ?: defaultValue
+
+    override fun save(key: String, value: Boolean) = sp.edit().putBoolean(key, value).apply()
+
+    override fun get(key: String, defaultValue: Boolean) = sp.getBoolean(key, defaultValue)
 }

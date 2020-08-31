@@ -4,4 +4,7 @@
     <string name="nickname_hint">Your nickname</string>
     <string name="save_button_title">Save</string>
     <string name="send_button_label">Send</string>
+    <string name="use_livedata_feature">Use live data feature</string>
+    <string name="setup_action_label">SETUP</string>
+    <string name="apply_button_title">Apply</string>
 </resources>

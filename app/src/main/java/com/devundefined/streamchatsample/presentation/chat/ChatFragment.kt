@@ -15,6 +15,7 @@ import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.databinding.FragmentChatBinding
 import com.devundefined.streamchatsample.domain.UserExtensions.token
 import com.devundefined.streamchatsample.domain.UserRepo
+import com.devundefined.streamchatsample.presentation.MainActivity
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.api.models.QueryChannelRequest
 import io.getstream.chat.android.client.controllers.ChannelController
@@ -126,9 +127,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding.loader.isVisible = false
         binding.contentContainer.isVisible = true
         showMessages(channel.messages)
-        channel.name.takeIf(String::isNotBlank)?.let { title ->
-            binding.toolbar.title = title
-        }
+        channel.name.takeIf(String::isNotBlank)
+            ?.let { (activity as? MainActivity)?.updateToolbarTitle(it) }
     }
 
     private fun handleError(error: ChatError) {
