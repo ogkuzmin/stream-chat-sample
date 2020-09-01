@@ -27,6 +27,7 @@ class SetupFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.run {
+            switcher.isChecked = keyValueStorage.get(Toggles.KEY_LIVEDATA_TOGGLE, false)
             saveButton.setOnClickListener {
                 if (keyValueStorage.get(Toggles.KEY_LIVEDATA_TOGGLE, false) != switcher.isChecked) {
                     keyValueStorage.save(Toggles.KEY_LIVEDATA_TOGGLE, switcher.isChecked)

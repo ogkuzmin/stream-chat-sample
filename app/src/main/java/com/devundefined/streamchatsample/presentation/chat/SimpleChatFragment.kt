@@ -31,11 +31,11 @@ import io.getstream.chat.android.client.utils.observable.Subscription
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
-class ChatFragment : Fragment(R.layout.fragment_chat) {
+class SimpleChatFragment : Fragment(R.layout.fragment_chat) {
     private val userRepo: UserRepo by inject()
     private val appContext: Context by inject()
-    private lateinit var client: ChatClient
-    private lateinit var channelController: ChannelController
+    private var client: ChatClient? = null
+    private var channelController: ChannelController? = null
     private lateinit var currentUser: User
     private lateinit var binding: FragmentChatBinding
     private lateinit var adapter: MessageAdapter
@@ -49,7 +49,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             .logLevel(ChatLogLevel.ERROR)
             .build()
         currentUser = userRepo.find() ?: throw IllegalArgumentException("User must be non null!!!")
-        client.setUser(currentUser, currentUser.token, object : InitConnectionListener() {
+        client?.setUser(currentUser, currentUser.token, object : InitConnectionListener() {
             override fun onError(error: ChatError) {
                 handleError(error)
             }
@@ -75,8 +75,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding.run {
             sendButton.isInvisible = true
             sendProgress.isVisible = true
-            channelController.sendMessage(Message().apply { text = messageInput.text.toString() })
-                .enqueue {
+            channelController?.sendMessage(Message().apply { text = messageInput.text.toString() })
+                ?.enqueue {
                     sendButton.isInvisible = false
                     sendProgress.isVisible = false
                     when (it.isSuccess) {
@@ -96,23 +96,23 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun onConnected() {
-        channelController = client.channel(
+        channelController = client?.channel(
             CHANNEL_TYPE,
             CHANNEL_ID
         )
         val data: Map<String, Any> = mapOf()
-        channelController.query(
+        channelController?.query(
             QueryChannelRequest()
                 .withData(data)
                 .withMessages(100)
                 .withWatch()
-        ).enqueue {
+        )?.enqueue {
             when (it.isSuccess) {
                 true -> showChannelContent(it.data())
                 false -> handleError(it.error())
             }
         }
-        channelController.events().filter(EVENT_TYPE_NEW_MESSAGES).subscribe { chatEvent ->
+        channelController?.events()?.filter(EVENT_TYPE_NEW_MESSAGES)?.subscribe { chatEvent ->
             (chatEvent as? NewMessageEvent)?.let { onNewMessage(it.message) }
         }
     }
@@ -139,14 +139,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private fun showMessages(messages: List<Message>) {
         adapter = MessageAdapter(currentUser, messages)
         binding.messageRecycler.run {
-            adapter = this@ChatFragment.adapter
+            adapter = this@SimpleChatFragment.adapter
             layoutManager = LinearLayoutManager(context)
-            post { smoothScrollToPosition(this@ChatFragment.adapter.itemCount) }
+            post { smoothScrollToPosition(this@SimpleChatFragment.adapter.itemCount) }
         }
     }
 
     override fun onDestroy() {
-        channelController.stopWatching()
+        channelController?.stopWatching()
         subscription?.unsubscribe()
         super.onDestroy()
     }

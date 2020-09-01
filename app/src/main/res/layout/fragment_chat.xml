@@ -55,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:enabled="false"
                     android:background="@drawable/default_button_selector"
                     android:text="@string/send_button_label" />
 

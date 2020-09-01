@@ -11,7 +11,7 @@ import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.databinding.FragmentInputNameBinding
 import com.devundefined.streamchatsample.domain.UserExtensions
 import com.devundefined.streamchatsample.domain.UserRepo
-import com.devundefined.streamchatsample.presentation.chat.ChatFragment
+import com.devundefined.streamchatsample.presentation.chat.SimpleChatFragment
 import org.koin.android.ext.android.inject
 
 class InputNameFragment : Fragment(R.layout.fragment_input_name) {
@@ -41,7 +41,7 @@ class InputNameFragment : Fragment(R.layout.fragment_input_name) {
     }
 
     private fun showChatFragment() {
-        (activity as? MainActivity)?.showFragment(ChatFragment())
+        (activity as? MainActivity)?.showFragment(SimpleChatFragment())
     }
 
     companion object {
