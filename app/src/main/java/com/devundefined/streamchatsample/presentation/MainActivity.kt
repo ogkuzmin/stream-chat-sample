@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.devundefined.streamchatsample.R
-import com.devundefined.streamchatsample.databinding.ActivityMainBinding
 import com.devundefined.streamchatsample.domain.UserRepo
 import com.devundefined.streamchatsample.infrastructure.KeyValueStorage
 import com.devundefined.streamchatsample.infrastructure.Toggles
-import com.devundefined.streamchatsample.presentation.chat.SimpleChatFragment
+import com.devundefined.streamchatsample.presentation.simplechat.SimpleChatFragment
 import com.devundefined.streamchatsample.presentation.setup.SetupFragment
 import org.koin.android.ext.android.inject
 

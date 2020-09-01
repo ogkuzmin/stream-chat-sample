@@ -1,4 +1,4 @@
-package com.devundefined.streamchatsample.presentation.chat
+package com.devundefined.streamchatsample.presentation.simplechat
 
 import android.content.Context
 import android.os.Bundle

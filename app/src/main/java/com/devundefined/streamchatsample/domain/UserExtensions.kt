@@ -12,7 +12,7 @@ object UserExtensions {
     private fun createToken(id: String): String = generateToken(
         id,
         BuildConfig.API_SECRET
-    )//"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdGVyIn0.TFiykeeVhgTWpNw_WY1BH4VQCLmWZofm44kxDBnyb9s"
+    )
 
     fun createUser(name: String): User = User(UUID.randomUUID().toString()).apply {
         this.name = name
