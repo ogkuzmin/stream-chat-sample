@@ -11,6 +11,9 @@ import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.databinding.FragmentInputNameBinding
 import com.devundefined.streamchatsample.domain.UserExtensions
 import com.devundefined.streamchatsample.domain.UserRepo
+import com.devundefined.streamchatsample.infrastructure.KeyValueStorage
+import com.devundefined.streamchatsample.infrastructure.Toggles
+import com.devundefined.streamchatsample.presentation.livedatachat.LiveDataChatFragment
 import com.devundefined.streamchatsample.presentation.simplechat.SimpleChatFragment
 import org.koin.android.ext.android.inject
 
@@ -19,6 +22,7 @@ class InputNameFragment : Fragment(R.layout.fragment_input_name) {
     private lateinit var binding: FragmentInputNameBinding
 
     private val userRepo: UserRepo by inject()
+    private val keyValueStorage: KeyValueStorage by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +45,15 @@ class InputNameFragment : Fragment(R.layout.fragment_input_name) {
     }
 
     private fun showChatFragment() {
-        (activity as? MainActivity)?.showFragment(SimpleChatFragment())
+        (activity as? MainActivity)?.showFragment(getChatFragment())
+    }
+
+    private fun getChatFragment(): Fragment {
+        return if (keyValueStorage.get(Toggles.KEY_LIVEDATA_TOGGLE, false)) {
+            LiveDataChatFragment()
+        } else {
+            SimpleChatFragment()
+        }
     }
 
     companion object {

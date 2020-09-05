@@ -104,7 +104,7 @@ class SimpleChatFragment : Fragment(R.layout.fragment_chat) {
         channelController?.query(
             QueryChannelRequest()
                 .withData(data)
-                .withMessages(100)
+                .withMessages(MESSAGE_LIMIT)
                 .withWatch()
         )?.enqueue {
             when (it.isSuccess) {
@@ -152,8 +152,9 @@ class SimpleChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     companion object {
-        private const val CHANNEL_TYPE = "livestream"
-        private const val CHANNEL_ID = "channel_id"
+        const val CHANNEL_TYPE = "livestream"
+        const val CHANNEL_ID = "channel_id"
+        const val MESSAGE_LIMIT = 100
         private const val KEY_NAME = "name"
         private const val CHANNEL_NAME = "Sample channel"
         private const val EVENT_TYPE_NEW_MESSAGES = "message.new"

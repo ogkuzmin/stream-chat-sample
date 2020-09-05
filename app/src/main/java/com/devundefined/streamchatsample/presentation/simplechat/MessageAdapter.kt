@@ -2,6 +2,7 @@ package com.devundefined.streamchatsample.presentation.simplechat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.domain.UserExtensions.isEqualTo
@@ -48,6 +49,34 @@ class MessageAdapter(
     fun insertNew(message: Message) {
         messages = messages + message
         notifyItemInserted(messages.lastIndex)
+    }
+
+    fun compareAndSet(newMessages: List<Message>) {
+        MessageDiffUtil(messages, newMessages)
+            .let(DiffUtil::calculateDiff)
+            .dispatchUpdatesTo(this)
+        messages = newMessages
+    }
+
+    private class MessageDiffUtil(
+        private val oldList: List<Message>,
+        private val list: List<Message>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = list.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldValue = oldList[oldItemPosition]
+            val newValue = list[newItemPosition]
+            return oldValue.id == newValue.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldValue = oldList[oldItemPosition]
+            val newValue = list[newItemPosition]
+            return oldValue.id == newValue.id && oldValue.text == newValue.text
+        }
     }
 
     companion object {
