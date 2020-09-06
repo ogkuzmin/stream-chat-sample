@@ -1,4 +1,4 @@
-package com.devundefined.streamchatsample.presentation.simplechat
+package com.devundefined.streamchatsample.presentation.chat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.devundefined.streamchatsample.R
 import com.devundefined.streamchatsample.domain.UserExtensions.isEqualTo
+import com.devundefined.streamchatsample.presentation.chat.simplechat.MessageViewHolder
+import com.devundefined.streamchatsample.presentation.chat.simplechat.OwnMessageViewHolder
+import com.devundefined.streamchatsample.presentation.chat.simplechat.StandardMessageViewHolder
 import io.getstream.chat.android.client.models.Message
 import io.getstream.chat.android.client.models.User
 

@@ -13,8 +13,8 @@ import com.devundefined.streamchatsample.domain.UserExtensions
 import com.devundefined.streamchatsample.domain.UserRepo
 import com.devundefined.streamchatsample.infrastructure.KeyValueStorage
 import com.devundefined.streamchatsample.infrastructure.Toggles
-import com.devundefined.streamchatsample.presentation.livedatachat.LiveDataChatFragment
-import com.devundefined.streamchatsample.presentation.simplechat.SimpleChatFragment
+import com.devundefined.streamchatsample.presentation.chat.livedatachat.LiveDataChatFragment
+import com.devundefined.streamchatsample.presentation.chat.simplechat.SimpleChatFragment
 import org.koin.android.ext.android.inject
 
 class InputNameFragment : Fragment(R.layout.fragment_input_name) {

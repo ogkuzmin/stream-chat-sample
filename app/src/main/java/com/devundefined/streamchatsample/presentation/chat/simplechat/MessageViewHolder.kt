@@ -1,4 +1,4 @@
-package com.devundefined.streamchatsample.presentation.simplechat
+package com.devundefined.streamchatsample.presentation.chat.simplechat
 
 import android.content.Context
 import android.util.TypedValue
