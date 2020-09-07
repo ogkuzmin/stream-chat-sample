@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.core.view.isInvisible
@@ -24,6 +25,7 @@ import io.getstream.chat.android.client.models.User
 import io.getstream.chat.android.client.socket.InitConnectionListener
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 abstract class BaseChatFragment : Fragment(R.layout.fragment_chat) {
     private val userRepo: UserRepo by inject()
@@ -76,11 +78,23 @@ abstract class BaseChatFragment : Fragment(R.layout.fragment_chat) {
     protected fun showMessages(messages: List<Message>) {
         binding.loader.isVisible = false
         binding.contentContainer.isVisible = true
-        binding.messageInput.requestFocus()
+        binding.messageInput.post {
+            (appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).run {
+                showSoftInput(
+                    binding.messageInput,
+                    InputMethodManager.SHOW_IMPLICIT
+                )
+                toggleSoftInput(
+                    InputMethodManager.SHOW_FORCED,
+                    InputMethodManager.HIDE_IMPLICIT_ONLY
+                )
+            }
+            binding.messageInput.requestFocus()
+            binding.messageRecycler.postDelayed({ scrollToLast() }, TimeUnit.SECONDS.toMillis(1))
+        }
         binding.messageRecycler.run {
             adapter = MessageAdapter(currentUser, messages)
             layoutManager = LinearLayoutManager(context)
-            post { scrollToLast() }
         }
     }
 
